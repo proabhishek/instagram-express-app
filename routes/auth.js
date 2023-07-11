@@ -52,7 +52,7 @@ authRouter.post('/signup', async (req, res) => {
  
    // Check if all fields are filled
    if (!name || !email || !password) {
-     return sendResponse(res, false, 'Please add all the fields', null);
+     return sendResponse(res, false, 'Please add all the fields', null,400);
    }
  
    try {
@@ -77,7 +77,7 @@ authRouter.post('/signup', async (req, res) => {
      let savedUser = await newUser.save();
  
      if (!savedUser) {
-       return sendResponse(res, false, 'User not saved', null);
+       return sendResponse(res, false, 'User not saved', null,400);
      }
  
      // Generate token
@@ -89,7 +89,7 @@ authRouter.post('/signup', async (req, res) => {
  
    } catch (err) {
      console.log(err);
-     return sendResponse(res, false, 'Server error', null);
+     return sendResponse(res, false, 'Server error', null,500);
    }
  });
 
@@ -98,20 +98,20 @@ authRouter.post('/signup', async (req, res) => {
    const { email, password } = req.body;
  
    if (!email || !password) {
-     return sendResponse(res, false, 'Please add all the fields', null);
+     return sendResponse(res, false, 'Please add all the fields', null,400);
    }
  
    try {
      const foundUser = await User.findOne({ email });
  
      if (!foundUser) {
-       return sendResponse(res, false, 'User not found', null);
+       return sendResponse(res, false, 'User not found', null,400);
      }
  
      const isMatch = await bcrypt.compare(password, foundUser.password);
  
      if (!isMatch) {
-       return sendResponse(res, false, 'Invalid password', null);
+       return sendResponse(res, false, 'Invalid password', null,400);
      }
  
      // Generate token
@@ -123,7 +123,7 @@ authRouter.post('/signup', async (req, res) => {
  
    } catch (err) {
      console.log('Issue while searching email in database', err);
-     return sendResponse(res, false, 'Server error', null);
+     return sendResponse(res, false, 'Server error', null, 500);
    }
  });
 
@@ -138,7 +138,7 @@ authRouter.delete('/logout', isLoggedIn, async (req, res) => {
      return sendResponse(res, true, 'User logged out successfully', savedUser);
    } catch (err) {
      console.log('Logout Failed', err);
-     return sendResponse(res, false, 'Logout Failed', null);
+     return sendResponse(res, false, 'Logout Failed', null, 500);
    }
  });
 

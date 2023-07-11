@@ -60,7 +60,7 @@ authRouter.post('/signup', async (req, res) => {
      const existingUser = await User.findOne({ email });
  
      if (existingUser) {
-       return sendResponse(res, false, 'User already exists with that email', null);
+       return sendResponse(res, false, 'User already exists with that email', null, 400);
      }
  
      // Hash the password

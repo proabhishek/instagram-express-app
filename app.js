@@ -26,8 +26,12 @@ mongoose.connection.on("error", () => {console.log("Error connecting to database
 // Middleware: 
 app.use(cors());
 app.use(express.json()) 
-app.use("/auth", authRouter);
-app.use("/post", postRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
+
+app.get("/", (req, res) => {
+    res.send("Hello world to this insta app, Its a backend app so no output here");
+})
 
 
 

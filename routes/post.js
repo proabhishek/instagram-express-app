@@ -138,6 +138,20 @@ postRouter.get('/my-posts', isLoggedIn, async (req, res) => {
     }
 });
 
+postRouter.get('/all-posts', isLoggedIn, async (req, res) => {
+    try {
+        // Find all the posts by the logged-in user
+        let posts = await Post.find();
+
+        // Send the posts as a response
+        return sendResponse(res, true, 'Posts retrieved successfully', posts);
+
+    } catch (err) {
+        console.error(err);
+        return sendResponse(res, false, 'Server error', null, 500);
+    }
+});
+
 
 
 

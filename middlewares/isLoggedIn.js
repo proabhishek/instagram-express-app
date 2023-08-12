@@ -12,6 +12,10 @@ const isLoggedIn = async (req, res, next) => {
     }
   
     token = token.split(" ")[1];
+
+    if (!token) {
+      return sendResponse(res, false, 'You must be logged in', null);
+    }
   
     try {
       const foundUser = await User.findOne({ token });

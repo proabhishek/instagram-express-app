@@ -1,10 +1,14 @@
 // // npm i multer cloudinary multer-s3 multer-storage-cloudinary
 
-import {v2 as cloudinary} from 'cloudinary'; 
-// const { CloudinaryStorage } = require('multer-storage-cloudinary');
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import multer from 'multer';
-import dotenv from 'dotenv';
+// import {v2 as cloudinary} from 'cloudinary'; 
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+// import { CloudinaryStorage } from 'multer-storage-cloudinary';
+// import multer from 'multer';
+const multer = require('multer');
+
+// import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
 
 // access from .env 
@@ -52,4 +56,6 @@ const parser = multer({
 
 });
 
-export default parser;
+// export default parser;
+
+module.exports = parser;

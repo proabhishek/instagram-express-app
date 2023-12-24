@@ -4,6 +4,18 @@ const postRouter = express.Router();
 const Post = mongoose.model('Post');
 const isLoggedIn = require('../middlewares/isLoggedIn');  
 const sendResponse = require('../utilities/response');
+const  parser = require('../utilities/upload.js');
+
+
+postRouter.post("/upload",parser.single('file'), async (req, res)=>{
+    try{ 
+      const file_url = req.file.path;
+      sendResponse(res, true, 'File uploaded successfully', {file_url});
+    }
+    catch(err){
+      sendResponse(res, false, 'File upload failed', null, 500);
+    }
+  })
 
 postRouter.post('/create', isLoggedIn, async (req, res) => {
     const { text, image } = req.body;

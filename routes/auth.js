@@ -20,6 +20,7 @@ const { v4:uuid4 } = require('uuid');
 const isLoggedIn = require("../middlewares/isLoggedIn.js");
 // const jwt = require("jsonwebtoken")
 const sendResponse = require('../utilities/response');
+import parser from '../utilities/upload.js';
 
 
 const zukuMessage = [
@@ -46,6 +47,15 @@ const zukuMessage = [
 ]
 
 
+authRouter.post("/upload",parser.single('file'), async (req, res)=>{
+  try{ 
+    const file_url = req.file.path;
+    sendResponse(res, true, 'File uploaded successfully', {file_url});
+  }
+  catch(err){
+    sendResponse(res, false, 'File upload failed', null, 500);
+  }
+})
 
 authRouter.post('/signup', async (req, res) => {
    const { name, email, password } = req.body;

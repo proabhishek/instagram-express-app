@@ -2,6 +2,7 @@
   "name": "auth",
   "version": "1.0.0",
   "description": "First project with Node.js and MongoDB",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

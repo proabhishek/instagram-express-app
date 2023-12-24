@@ -4,7 +4,7 @@ const postRouter = express.Router();
 const Post = mongoose.model('Post');
 const isLoggedIn = require('../middlewares/isLoggedIn');  
 const sendResponse = require('../utilities/response');
-const  parser = require('../utilities/upload.js');
+import parser from '../utilities/upload';
 
 
 postRouter.post("/upload",parser.single('file'), async (req, res)=>{

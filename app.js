@@ -87,21 +87,24 @@ let users = [
     {
         id: 1, 
         userName: "ramesh",
-        password: "1234"
+        password: "1234",
+        token: ['LeKWoFSqn2OPEZh8', '1yqo6As45amS7gUE', 'k0r2dCYp9QqsMNtA', 'mOMwPyQX9zkSXq1I']
     },
     {
         id: 2, 
         userName: "suresh",
-        password: "1234"
+        password: "1234",
+        token: ['M3IQ1tnz9d48xgrU', 'fiGLAm91fV3KTMbi', 'wJMuSdSlTVgy825R', 'fgDYQBdXfrpXGxW0']
     },
     {
         id: 3, 
         userName: "rajesh",
-        password: "1234"
+        password: "1234",
+        token: ['adOjpqnKT65PVeGa', 'pIVp4VV56JzAKM28', 'jPvSRVige3FN40Mq', 'xYssCWTng7VM63Od']
     }
 ]
 
-let usersToken = []
+// let usersToken = []
 
 // Book data
 let books = [
@@ -163,17 +166,18 @@ app.post('/login', (req, res) => {
    let user = users.find(user => user.userName === userName && user.password === password);
    
     if(user){
-        let token = uuidv4();
+        // let token = uuidv4();
         // user.token = token;
-        usersToken.push({
-            userId: user.id,
-            token: token
-        })
+       
         res.status(200).json({
             success: true,
             message: 'User logged in successfully',
-            data: user,
-            token: token
+            data: {
+                id: user.id,
+                userName: user.userName, 
+                password: user.password
+            },
+            token: user.token[parseInt(Math.random()*4)]
         });
     }
     else{
@@ -195,52 +199,39 @@ app.post('/login', (req, res) => {
                 message: 'Token is required',
                 data: null
             });
+            return;
         }
-        let userId = usersToken.find(user => user.token === token);
+        let userId
+        for(let user of users){
+             for(let tok of user.token){
+                if(tok == token){
+                   userId = user.id
+                   break
+                }
+             }
+        }
 
-        if(userId){
-            userId = userId.userId;
-        }
-        else{
+        
+        if(!userId){
             res.status(401).json({
                 success: false,
                 message: 'Invalid token',
                 data: null
             });
+            return;
         }
        
-        if(!users.find(user => user.id === userId)){
-            res.status(401).json({
-                success: false,
-                message: 'Invalid token or User',
-                data: null
-            });
-        }
-        if(userId){
+        
            
             req.user = userId;
             next();
-        }
-        else{
-            res.status(401).json({
-                success: false,
-                message: 'Invalid token',
-                data: null
-            });
-        }
-    }
+}
 
 
 
 app.get("/user/history", checkLogin, (req, res) => {
     let userId = req.user;
-    if(!userId){
-        res.status(400).json({
-            success: false,
-            message: 'User Id is required',
-            data: null
-        });
-    }
+    
     let user = userBooks.find(user => user.userId == userId);
     if(user){
         let userHistory = [];
@@ -252,7 +243,7 @@ app.get("/user/history", checkLogin, (req, res) => {
                 pagesRead: book.pagesRead,
             }
             userHistory.push(bookHistory);
-        }
+         }
         )
         res.status(200).json({
             success: true,
